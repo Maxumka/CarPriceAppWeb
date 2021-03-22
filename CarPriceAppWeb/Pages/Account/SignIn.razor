@@ -1,6 +1,8 @@
-﻿@page "/account/signin"
+﻿@page "/"
+@page "/account/signin"
 
 @inject CarPriceHttpClient HttpClient
+@inject NavigationManager NavManager
 
 <div class="card">
     <h4 clas="card-header">Sign In</h4>
@@ -20,8 +22,6 @@
     </div>
 </div>
 
-<p>Is Sign In: @isSignIn</p>
-
 @code {
     private UserModel user = new();
 
@@ -29,6 +29,11 @@
 
     private async Task SignIning()
     {
-        isSignIn = await HttpClient.SignIn(user);
+        await HttpClient.SignIn(user);
+
+        if (CarPriceHttpClient.IsSignIned)
+        {
+            NavManager.NavigateTo("counter");
+        }
     }
 }

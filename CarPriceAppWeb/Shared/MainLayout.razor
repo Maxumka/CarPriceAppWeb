@@ -1,13 +1,24 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+@inject CarPriceHttpClient HttpClient
 
-    <div class="main">
-        <div class="content px-4">
-            @Body
+@if (CarPriceHttpClient.IsSignIned)
+{
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+
+        <div class="main">
+            <div class="content px-4">
+                @Body
+            </div>
         </div>
     </div>
-</div>
+}
+else 
+{
+    <div class="col-md-6 offset-md-3 mt-5">
+        @Body
+    </div>
+}

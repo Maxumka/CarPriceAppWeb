@@ -15,19 +15,21 @@
                 <InputText class="form-control" @bind-Value="@user.Password"/>
             </div>
             <button class="btn btn-primary" @onclick="SignUping">Sign Up</button>
+            <NavLink href="account/signin" class="btn btn-link">Cancel</NavLink>
         </EditForm>
     </div>
 </div>
 
-<p>Is Sign Up: @isSignUp</p>
-
 @code {
     private UserModel user = new();
 
-    private bool isSignUp = false;
-
     private async Task SignUping()
     {
-        isSignUp = await HttpClient.SignUp(user);
+        await HttpClient.SignUp(user);
+
+        if (CarPriceHttpClient.IsSignIned)
+        {
+            
+        }
     }
 }

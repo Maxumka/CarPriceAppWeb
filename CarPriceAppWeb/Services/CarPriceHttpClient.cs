@@ -9,6 +9,8 @@ namespace CarPriceAppWeb.Services
     {
         private readonly HttpClient _client;
 
+        static public bool IsSignIned { get; private set; } = false;
+
         public CarPriceHttpClient(HttpClient client)
         {
             _client = client;
@@ -53,6 +55,10 @@ namespace CarPriceAppWeb.Services
             return token;
         }
 
-        private void SetToken(string token) => _client.DefaultRequestHeaders.Authorization = new("Bearer", token);
+        private void SetToken(string token)
+        {
+            IsSignIned = true;
+            _client.DefaultRequestHeaders.Authorization = new("Bearer", token);
+        }
     }
 }
