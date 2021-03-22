@@ -45,6 +45,13 @@ namespace CarPriceAppWeb.Services
             return true;
         }
 
+        public void SignOut()
+        {
+            Token = "";
+            IsSignIned = false;
+            SetToken();
+        }
+
         public async Task<int> GetPriceAsync(CarModel car)
         {
             SetToken();

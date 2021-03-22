@@ -1,0 +1,19 @@
+﻿@page "/account/signout"
+
+@inject CarPriceHttpClient HttpClient
+@inject NavigationManager NavManager
+
+<h4>Sign Out</h4>
+
+<p>Are you sure you want to sign out?</p>
+
+<button class="btn btn-primary" @onclick="SignOuting">Yes</button>
+
+@code {
+    private void SignOuting()
+    {
+        HttpClient.SignOut();
+
+        NavManager.NavigateTo("account/signin");
+    }
+}
