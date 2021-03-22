@@ -1,4 +1,3 @@
-using CarPriceAppWeb.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -29,7 +28,7 @@ namespace CarPriceAppWeb
                 client.DefaultRequestHeaders.Accept.Add(new("application/json"));
             });
 
-            services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<CarBestDealsStorageService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

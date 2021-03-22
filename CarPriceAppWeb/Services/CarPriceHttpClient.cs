@@ -2,9 +2,6 @@
 using System.Net.Http.Json;
 using CarPriceAppWeb.Models;
 using System.Threading.Tasks;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace CarPriceAppWeb.Services
 {
@@ -63,6 +60,19 @@ namespace CarPriceAppWeb.Services
             var price = await response.Content.ReadFromJsonAsync<int>();
 
             return price;
+        }
+
+        public async Task<CarBestDealModel[]> GetCarBestDeals(CarModel car)
+        {
+            SetToken();
+
+            var response = await _client.PostAsJsonAsync("/carbestdeals", car);
+
+            if (!response.IsSuccessStatusCode) return null;
+
+            var carBestDeals = await response.Content.ReadFromJsonAsync<CarBestDealModel[]>();
+
+            return carBestDeals;
         }
 
         public async Task<CarHistoryModel[]> GetHistortAsync()

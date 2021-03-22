@@ -1,0 +1,88 @@
+﻿@page "/carbestdeals/carbestdealsform"
+
+@inject CarPriceHttpClient HttpClient
+@inject CarBestDealsStorageService CarBestDealsStorage
+@inject NavigationManager NavManager
+
+<div class="card">
+    <h4 clas="card-header">Car Best Deals</h4>
+    <div class="card-body">
+        <EditForm Model="@car">
+
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Company</label>
+                        <InputText class="form-control" @bind-Value="@car.Company"/>
+                    </div>  
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Model</label>
+                        <InputText class="form-control" @bind-Value="@car.Model"/>
+                    </div>  
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Mileage</label>
+                        <InputNumber class="form-control" @bind-Value="@car.Mileage"/>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Year</label>
+                        <InputNumber class="form-control" @bind-Value="@car.Year"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <label>Engine Power</label>
+                        <InputNumber class="form-control" @bind-Value="@car.EnginePower"/>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Engine Volume</label>
+                        <InputNumber class="form-control" @bind-Value="@car.EngineVolume"/>
+                    </div>
+                </div>
+            </div>
+             
+            <div class="form-row">
+                <div class="col">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="gridCheck" @bind-value="@car.Transmission">
+                            <label class="form-check-label" for="gridCheck">Is automatic transmission?</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label>Price</label>
+                        <InputNumber class="form-control" @bind-Value="@car.Price"/>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" @onclick="GetCarBestDeals">Get Car Best Deals</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private CarModel car = new();
+
+    private async Task GetCarBestDeals()
+    {
+        CarBestDealsStorage.CarBestDealModels = await HttpClient.GetCarBestDeals(car);
+
+        NavManager.NavigateTo($"carbestdeals/carbestdealsdata");
+    }
+}

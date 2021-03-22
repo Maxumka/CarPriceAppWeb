@@ -1,0 +1,41 @@
+﻿@page "/carbestdeals/carbestdealsdata"
+
+@inject CarPriceHttpClient HttpClient
+@inject CarBestDealsStorageService CarBestDealsStorage
+
+<h1>Car Best Deals</h1>
+
+@if (CarBestDeals == null)
+{
+    <p><em>We have a problem :(</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Price</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var carBestDeal in CarBestDeals)
+            {
+                <tr>
+                    <td>@carBestDeal.Company</td>
+                    <td>@carBestDeal.Model</td>
+                    <td>@carBestDeal.Year</td>
+                    <td>@carBestDeal.Price</td>
+                    <td>@carBestDeal.Link</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private CarBestDealModel[] CarBestDeals => CarBestDealsStorage.CarBestDealModels;
+}
