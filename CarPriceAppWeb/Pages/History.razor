@@ -1,0 +1,45 @@
+﻿@page "/history"
+
+@inject CarPriceHttpClient HttpClient
+
+<h1>History</h1>
+
+@if (carHistories == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var carHistory in carHistories)
+            {
+                <tr>
+                    <td>@carHistory.Company</td>
+                    <td>@carHistory.Model</td>
+                    <td>@carHistory.Year</td>
+                    <td>@carHistory.Price</td>
+                    <td>@carHistory.Action</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private CarHistoryModel[] carHistories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        carHistories = await HttpClient.GetHistortAsync();
+    }
+}

@@ -1,7 +1,7 @@
 ﻿
 namespace CarPriceAppWeb.Models
 {
-    public class CarHistory
+    public class CarHistoryModel
     {
         public string Company { get; set; }
 

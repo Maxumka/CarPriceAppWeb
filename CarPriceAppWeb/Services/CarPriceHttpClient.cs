@@ -3,6 +3,8 @@ using System.Net.Http.Json;
 using CarPriceAppWeb.Models;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace CarPriceAppWeb.Services
 {
@@ -54,6 +56,19 @@ namespace CarPriceAppWeb.Services
             var price = await response.Content.ReadFromJsonAsync<int>();
 
             return price;
+        }
+
+        public async Task<CarHistoryModel[]> GetHistortAsync()
+        {
+            SetToken();
+
+            var response = await _client.GetAsync("/history");
+
+            if (!response.IsSuccessStatusCode) return null;
+
+            var cars = await response.Content.ReadFromJsonAsync<CarHistoryModel[]>();
+
+            return cars;
         }
 
         private async Task<string> GetTokenAsync(UserModel user)
