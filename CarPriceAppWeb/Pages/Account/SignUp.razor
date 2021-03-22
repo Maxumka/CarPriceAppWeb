@@ -1,0 +1,33 @@
+﻿@page "/account/signup"
+
+@inject CarPriceHttpClient HttpClient
+
+<div class="card">
+    <h4 clas="card-header">Sign Up</h4>
+    <div class="card-body">
+        <EditForm Model="@user">
+            <div class="form-group">
+                <label>Login</label>
+                <InputText class="form-control" @bind-Value="@user.Login"/>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <InputText class="form-control" @bind-Value="@user.Password"/>
+            </div>
+            <button class="btn btn-primary" @onclick="SignUping">Sign Up</button>
+        </EditForm>
+    </div>
+</div>
+
+<p>Is Sign Up: @isSignUp</p>
+
+@code {
+    private UserModel user = new();
+
+    private bool isSignUp = false;
+
+    private async Task SignUping()
+    {
+        isSignUp = await HttpClient.SignUp(user);
+    }
+}
