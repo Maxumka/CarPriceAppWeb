@@ -25,15 +25,13 @@
 @code {
     private UserModel user = new();
 
-    private bool isSignIn = false;
-
     private async Task SignIning()
     {
-        await HttpClient.SignIn(user);
+        await HttpClient.SignInAsync(user);
 
         if (CarPriceHttpClient.IsSignIned)
         {
-            NavManager.NavigateTo("counter");
+            NavManager.NavigateTo("calculate/carprice");
         }
     }
 }

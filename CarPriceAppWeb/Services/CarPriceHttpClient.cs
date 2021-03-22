@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using CarPriceAppWeb.Models;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace CarPriceAppWeb.Services
 {
@@ -11,54 +12,67 @@ namespace CarPriceAppWeb.Services
 
         static public bool IsSignIned { get; private set; } = false;
 
+        static private string Token { get; set; } = "";
+
         public CarPriceHttpClient(HttpClient client)
         {
             _client = client;
         }
 
-        public async Task<bool> SignIn(UserModel user)
+        public async Task<bool> SignInAsync(UserModel user)
         {
             if (user is null) return false;
 
-            var token = await GetToken(user);
+            var token = await GetTokenAsync(user);
 
             if (token is null) return false;
-
-            SetToken(token);
 
             return true;
         }
 
-        public async Task<bool> SignUp(UserModel user)
+        public async Task<bool> SignUpAsync(UserModel user)
         {
             var response = await _client.PostAsJsonAsync("/signup", user);
 
             if (!response.IsSuccessStatusCode) return false;
 
-            var token = await GetToken(user);
+            var token = await GetTokenAsync(user);
 
             if (token is null) return false;
-
-            SetToken(token);
 
             return true;
         }
 
-        private async Task<string> GetToken(UserModel user)
+        public async Task<int> GetPriceAsync(CarModel car)
+        {
+            SetToken();
+
+            var response = await _client.PostAsJsonAsync("/carprice", car);
+
+            if (!response.IsSuccessStatusCode) return -1;
+
+            var price = await response.Content.ReadFromJsonAsync<int>();
+
+            return price;
+        }
+
+        private async Task<string> GetTokenAsync(UserModel user)
         {
             var response = await _client.PostAsJsonAsync("/identity", user);
 
             if (!response.IsSuccessStatusCode) return null;
 
-            var token = await response.Content.ReadAsStringAsync();
+            var token = await response.Content.ReadFromJsonAsync<string>();
+
+            Token = token;
+            IsSignIned = true;
 
             return token;
         }
 
-        private void SetToken(string token)
+        private void SetToken()
         {
-            IsSignIned = true;
-            _client.DefaultRequestHeaders.Authorization = new("Bearer", token);
+            _client.DefaultRequestHeaders.Authorization = new("Bearer", Token);
         }
     }
 }

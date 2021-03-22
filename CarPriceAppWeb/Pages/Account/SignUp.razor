@@ -25,7 +25,7 @@
 
     private async Task SignUping()
     {
-        await HttpClient.SignUp(user);
+        await HttpClient.SignUpAsync(user);
 
         if (CarPriceHttpClient.IsSignIned)
         {
