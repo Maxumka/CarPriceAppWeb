@@ -33,13 +33,27 @@ else
             }
         </tbody>
     </table>
+    <button class="btn btn-primary" @onclick="Back">Back</button>
+    <button class="btn btn-primary" @onclick="Next">Next</button>
 }
 
 @code {
-    private CarHistoryModel[] carHistories;
+    private PagintaionEnumerable<CarHistoryModel> carHistories;
+
+    private void Next()
+    {
+        carHistories.NextPage();
+    }
+
+    private void Back()
+    {
+        carHistories.BackPage();
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        carHistories = await HttpClient.GetHistortAsync();
+        var cars = await HttpClient.GetHistortAsync();
+
+        carHistories = cars.ToPaginationEnumerable(10);
     }
 }

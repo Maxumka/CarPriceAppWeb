@@ -34,8 +34,27 @@ else
             }
         </tbody>
     </table>
+
+    <button class="btn btn-primary" @onclick="Back">Back</button>
+    <button class="btn btn-primary" @onclick="Next">Next</button>
 }
 
 @code {
-    private CarBestDealModel[] CarBestDeals => CarBestDealsStorage.CarBestDealModels;
+    private PagintaionEnumerable<CarBestDealModel> CarBestDeals;
+
+    private void Next()
+    {
+        CarBestDeals.NextPage();
+    }
+
+    private void Back()
+    {
+        CarBestDeals.BackPage();
+    }
+
+    protected override void OnInitialized()
+    {
+        CarBestDeals = CarBestDealsStorage.CarBestDealModels
+                                          .ToPaginationEnumerable(10);
+    }
 }
