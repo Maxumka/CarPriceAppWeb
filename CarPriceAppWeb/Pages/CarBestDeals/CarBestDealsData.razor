@@ -5,7 +5,7 @@
 
 <h1>Car Best Deals</h1>
 
-@if (CarBestDeals == null)
+@if (сarBestDeals == null)
 {
     <p><em>We have a problem :(</em></p>
 }
@@ -22,7 +22,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var carBestDeal in CarBestDeals)
+            @foreach (var carBestDeal in сarBestDeals)
             {
                 <tr>
                     <td>@carBestDeal.Company</td>
@@ -40,21 +40,21 @@ else
 }
 
 @code {
-    private PagintaionEnumerable<CarBestDealModel> CarBestDeals;
+    private PagintaionEnumerable<CarBestDealModel> сarBestDeals;
 
     private void Next()
     {
-        CarBestDeals.NextPage();
+        сarBestDeals.NextPage();
     }
 
     private void Back()
     {
-        CarBestDeals.BackPage();
+        сarBestDeals.BackPage();
     }
 
     protected override void OnInitialized()
     {
-        CarBestDeals = CarBestDealsStorage.CarBestDealModels
+        сarBestDeals = CarBestDealsStorage.CarBestDealModels
                                           .ToPaginationEnumerable(10);
     }
 }

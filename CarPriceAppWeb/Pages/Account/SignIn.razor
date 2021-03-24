@@ -16,7 +16,13 @@
                 <label>Password</label>
                 <InputText class="form-control" @bind-Value="@user.Password"/>
             </div>
-            <button class="btn btn-primary" @onclick="SignIning">Sign In</button>
+            <button class="btn btn-primary" @onclick="SignIning">
+                @if (isLoading)
+                {
+                    <span class="spinner-border spinner-border-sm mr-1"></span>
+                }
+                Sign In
+            </button>
             <NavLink href="account/signup" class="btn btn-link">Sign Up</NavLink>
         </EditForm>
     </div>
@@ -24,13 +30,17 @@
 
 @code {
     private UserModel user = new();
+    private bool isLoading = false;
 
     private async Task SignIning()
     {
+        isLoading = true;
+
         await HttpClient.SignInAsync(user);
 
         if (CarPriceHttpClient.IsSignIned)
         {
+            isLoading = false;
             NavManager.NavigateTo("calculate/carprice");
         }
     }

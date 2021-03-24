@@ -71,7 +71,13 @@
                 </div>
             </div>
             
-            <button class="btn btn-primary" @onclick="GetCarBestDeals">Get Car Best Deals</button>
+            <button class="btn btn-primary" @onclick="GetCarBestDeals">
+                @if (isLoading)
+                {
+                    <span class="spinner-border spinner-border-sm mr-1"></span>
+                }
+                Get Car Best Deals
+            </button>
         </EditForm>
     </div>
 </div>
@@ -79,10 +85,19 @@
 @code {
     private CarModel car = new();
 
+    private bool isLoading = false;
+
     private async Task GetCarBestDeals()
     {
-        CarBestDealsStorage.CarBestDealModels = await HttpClient.GetCarBestDeals(car);
+        isLoading = true;
 
-        NavManager.NavigateTo($"carbestdeals/carbestdealsdata");
+        var carBestDealModels = await HttpClient.GetCarBestDeals(car);
+
+        if (carBestDealModels is not null)
+        {
+            isLoading = false;
+            CarBestDealsStorage.CarBestDealModels = carBestDealModels;
+            NavManager.NavigateTo($"carbestdeals/carbestdealsdata");
+        }      
     }
 }

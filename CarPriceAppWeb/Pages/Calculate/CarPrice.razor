@@ -61,17 +61,31 @@
             
             <h4>Price: @car.Price</h4>
 
-            <button class="btn btn-primary" @onclick="GetPrice">Calculate price</button>
+            <button class="btn btn-primary" @onclick="GetPrice">
+                @if (isLoading)
+                {
+                    <span class="spinner-border spinner-border-sm mr-1"></span>
+                }
+                Calculate price
+            </button>
         </EditForm>
     </div>
 </div>
 
 @code {
     private CarModel car = new();
+    private bool isLoading = false;
 
     private async void GetPrice()
     {
+        isLoading = true;
+
         car.Price = await HttpClient.GetPriceAsync(car);
-        StateHasChanged();
+
+        if (car.Price is not -1)
+        {
+            isLoading = false;
+            StateHasChanged();
+        }      
     }
 }
