@@ -1,20 +1,25 @@
 ﻿@page "/"
 @page "/account/signin"
 
-@inject CarPriceHttpClient HttpClient
 @inject NavigationManager NavManager
+@inject ICarPriceService CarPriceService
+@inject LocalStorageService LocalStorage
 
 <div class="card">
     <h4 clas="card-header">Sign In</h4>
     <div class="card-body">
-        <EditForm Model="@user">
+        <EditForm EditContext="@editContext">
+            <DataAnnotationsValidator/>
+
             <div class="form-group">
                 <label>Login</label>
                 <InputText class="form-control" @bind-Value="@user.Login"/>
+                <ValidationMessage For="() => user.Login"/>
             </div>
             <div class="form-group">
                 <label>Password</label>
                 <InputText class="form-control" @bind-Value="@user.Password"/>
+                <ValidationMessage For="() => user.Password"/>
             </div>
             <button class="btn btn-primary" @onclick="SignIning">
                 @if (isLoading)
@@ -30,18 +35,29 @@
 
 @code {
     private UserModel user = new();
+    private EditContext editContext;
     private bool isLoading = false;
+
+    protected override void OnInitialized()
+    {
+        editContext = new(user);
+    }
 
     private async Task SignIning()
     {
-        isLoading = true;
-
-        await HttpClient.SignInAsync(user);
-
-        if (CarPriceHttpClient.IsSignIned)
+        if (editContext.Validate())
         {
+            isLoading = true;
+
+            await CarPriceService.SignInAsync(user);
+
+            if (LocalStorage.Token is not null)
+            {
+                
+                NavManager.NavigateTo("calculate/carprice");
+            }
+            
             isLoading = false;
-            NavManager.NavigateTo("calculate/carprice");
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿@page "/account/signout"
 
-@inject CarPriceHttpClient HttpClient
-@inject NavigationManager NavManager
+@inject ICarPriceService CarPriceService
 
 <h4>Sign Out</h4>
 
@@ -13,8 +12,6 @@
 @code {
     private void SignOuting()
     {
-        HttpClient.SignOut();
-
-        NavManager.NavigateTo("account/signin");
+        CarPriceService.SignOut();
     }
 }

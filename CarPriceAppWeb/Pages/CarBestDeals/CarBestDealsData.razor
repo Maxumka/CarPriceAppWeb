@@ -1,7 +1,6 @@
 ﻿@page "/carbestdeals/carbestdealsdata"
 
-@inject CarPriceHttpClient HttpClient
-@inject CarBestDealsStorageService CarBestDealsStorage
+@inject LocalStorageService LocalStorage
 
 <h1>Car Best Deals</h1>
 
@@ -54,7 +53,7 @@ else
 
     protected override void OnInitialized()
     {
-        сarBestDeals = CarBestDealsStorage.CarBestDealModels
-                                          .ToPaginationEnumerable(10);
+        сarBestDeals = LocalStorage.CarBestDealModels
+                                   .ToPaginationEnumerable(10);
     }
 }

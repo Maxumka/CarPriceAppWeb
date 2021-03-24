@@ -1,6 +1,6 @@
 ﻿@page "/calculate/carprice"
 
-@inject CarPriceHttpClient HttpClient
+@inject ICarPriceService CarPriceService
 
 <div class="card">
     <h4 clas="card-header">Car price</h4>
@@ -74,15 +74,16 @@
 
 @code {
     private CarModel car = new();
+
     private bool isLoading = false;
 
-    private async void GetPrice()
+    private async Task GetPrice()
     {
         isLoading = true;
 
-        car.Price = await HttpClient.GetPriceAsync(car);
+        car.Price = await CarPriceService.GetPriceAsync(car);
 
-        if (car.Price is not -1)
+        if (car.Price is not 0)
         {
             isLoading = false;
             StateHasChanged();

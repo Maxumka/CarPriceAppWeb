@@ -7,7 +7,7 @@ namespace CarPriceAppWeb.Infrastructure.Helpers
 {
     public class PagintaionEnumerable<T> : IEnumerable<T>
     {
-        private  T[] _items;
+        private readonly T[] _items;
 
         private readonly int _totalPages;
 

@@ -2,8 +2,10 @@
 
 namespace CarPriceAppWeb.Services
 {
-    public class CarBestDealsStorageService
+    public class LocalStorageService
     {
         public CarBestDealModel[] CarBestDealModels { get; set; }
+
+        public string Token { get; set; } = null;
     }
 }

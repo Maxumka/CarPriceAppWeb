@@ -1,8 +1,8 @@
 ﻿@inherits LayoutComponentBase
 
-@inject CarPriceHttpClient HttpClient
+@inject LocalStorageService LocalStorage
 
-@if (CarPriceHttpClient.IsSignIned)
+@if (LocalStorage.Token is not null)
 {
     <div class="page">
         <div class="sidebar">

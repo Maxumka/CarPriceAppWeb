@@ -1,110 +1,70 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Text;
+using System.Net.Http;
+using System.Text.Json;
 using System.Net.Http.Json;
-using CarPriceAppWeb.Models;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Components;
 
 namespace CarPriceAppWeb.Services
 {
-    public class CarPriceHttpClient
+    public interface ICarPriceHttpClient
+    {
+        Task<T> GetAsync<T>(string uri);
+        Task<U> PostAsync<T, U>(string uri, T value);
+    }
+
+    public class CarPriceHttpClient : ICarPriceHttpClient
     {
         private readonly HttpClient _client;
 
-        static public bool IsSignIned { get; private set; } = false;
+        private readonly LocalStorageService _localStorage;
 
-        static private string Token { get; set; } = "";
+        private readonly NavigationManager _navigationManager;
 
-        public CarPriceHttpClient(HttpClient client)
+        //public CarPriceHttpClient(HttpClient client, LocalStorageService localStorage, NavigationManager navigationManager)
+        //    => (_client, _localStorage, _navigationManager) = (client, localStorage, navigationManager);
+
+        public async Task<T> GetAsync<T>(string uri)
         {
-            _client = client;
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+
+            return await SendRequestAsync<T>(request);
         }
 
-        public async Task<bool> SignInAsync(UserModel user)
+        public async Task<U> PostAsync<T, U>(string uri, T value)
         {
-            if (user is null) return false;
+            var request = new HttpRequestMessage(HttpMethod.Post, uri)
+            {
+                Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json")
+            };
 
-            var token = await GetTokenAsync(user);
-
-            if (token is null) return false;
-
-            return true;
+            return await SendRequestAsync<U>(request);
         }
 
-        public async Task<bool> SignUpAsync(UserModel user)
+        private void SetToken(ref HttpRequestMessage requestMessage)
         {
-            var response = await _client.PostAsJsonAsync("/signup", user);
+            var token = _localStorage.Token;
 
-            if (!response.IsSuccessStatusCode) return false;
+            if (token is null) return;
 
-            var token = await GetTokenAsync(user);
-
-            if (token is null) return false;
-
-            return true;
+            requestMessage.Headers.Authorization = new("Bearer", token);
         }
 
-        public void SignOut()
+        private async Task<T> SendRequestAsync<T>(HttpRequestMessage requestMessage)
         {
-            Token = "";
-            IsSignIned = false;
-            SetToken();
-        }
+            SetToken(ref requestMessage);
 
-        public async Task<int> GetPriceAsync(CarModel car)
-        {
-            SetToken();
+            var response = await _client.SendAsync(requestMessage);
 
-            var response = await _client.PostAsJsonAsync("/carprice", car);
+            if (response.StatusCode is HttpStatusCode.Unauthorized)
+            {
+                _navigationManager.NavigateTo("account/signin");
+                return default;
+            }
 
-            if (!response.IsSuccessStatusCode) return -1;
-
-            var price = await response.Content.ReadFromJsonAsync<int>();
-
-            return price;
-        }
-
-        public async Task<CarBestDealModel[]> GetCarBestDeals(CarModel car)
-        {
-            SetToken();
-
-            var response = await _client.PostAsJsonAsync("/carbestdeals", car);
-
-            if (!response.IsSuccessStatusCode) return null;
-
-            var carBestDeals = await response.Content.ReadFromJsonAsync<CarBestDealModel[]>();
-
-            return carBestDeals;
-        }
-
-        public async Task<CarHistoryModel[]> GetHistortAsync()
-        {
-            SetToken();
-
-            var response = await _client.GetAsync("/history");
-
-            if (!response.IsSuccessStatusCode) return null;
-
-            var cars = await response.Content.ReadFromJsonAsync<CarHistoryModel[]>();
-
-            return cars;
-        }
-
-        private async Task<string> GetTokenAsync(UserModel user)
-        {
-            var response = await _client.PostAsJsonAsync("/identity", user);
-
-            if (!response.IsSuccessStatusCode) return null;
-
-            var token = await response.Content.ReadFromJsonAsync<string>();
-
-            Token = token;
-            IsSignIned = true;
-
-            return token;
-        }
-
-        private void SetToken()
-        {
-            _client.DefaultRequestHeaders.Authorization = new("Bearer", Token);
+            return await response.Content.ReadFromJsonAsync<T>();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿@page "/carbestdeals/carbestdealsform"
 
-@inject CarPriceHttpClient HttpClient
-@inject CarBestDealsStorageService CarBestDealsStorage
+@inject ICarPriceService CarPriceService
+@inject LocalStorageService LocalStorage
 @inject NavigationManager NavManager
 
 <div class="card">
@@ -91,13 +91,13 @@
     {
         isLoading = true;
 
-        var carBestDealModels = await HttpClient.GetCarBestDeals(car);
+        await CarPriceService.GetCarBestDeals(car);
 
-        if (carBestDealModels is not null)
+        if (LocalStorage.CarBestDealModels is not null)
         {
-            isLoading = false;
-            CarBestDealsStorage.CarBestDealModels = carBestDealModels;
             NavManager.NavigateTo($"carbestdeals/carbestdealsdata");
-        }      
+        }
+        
+        isLoading = false;
     }
 }

@@ -1,6 +1,6 @@
 ﻿@page "/history"
 
-@inject CarPriceHttpClient HttpClient
+@inject ICarPriceService CarPriceService
 
 <h1>History</h1>
 
@@ -52,7 +52,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var cars = await HttpClient.GetHistortAsync();
+        var cars = await CarPriceService.GetHistortAsync();
 
         carHistories = cars.ToPaginationEnumerable(10);
     }

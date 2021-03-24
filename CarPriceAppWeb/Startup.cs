@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using CarPriceAppWeb.Services;
+using System.Net.Http;
 
 namespace CarPriceAppWeb
 {
@@ -21,14 +22,14 @@ namespace CarPriceAppWeb
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            services.AddHttpClient<CarPriceHttpClient>(client =>
+            services.AddSingleton<LocalStorageService>();
+            services.AddHttpClient<ICarPriceService, CarPriceService>(client =>
             {
                 client.BaseAddress = new(Configuration["ApiSettings:CarPriceUrl"]);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new("application/json"));
             });
 
-            services.AddSingleton<CarBestDealsStorageService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -40,9 +41,6 @@ namespace CarPriceAppWeb
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days.
-                // You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                //app.UseHsts();
             }
 
             app.UseHttpsRedirection();
