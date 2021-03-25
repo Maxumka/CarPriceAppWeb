@@ -1,7 +1,7 @@
 ﻿
 namespace CarPriceAppWeb.Models
 {
-    public class CarBestDealModel
+    public class CarBestDealDataModel
     {
         public string Company { get; set; }
 

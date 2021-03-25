@@ -7,19 +7,22 @@
 <div class="card">
     <h4 clas="card-header">Car Best Deals</h4>
     <div class="card-body">
-        <EditForm Model="@car">
+        <EditForm EditContext="@editContext">
+            <DataAnnotationsValidator/>
 
             <div class="form-row">
                 <div class="col">
                     <div class="form-group">
                         <label>Company</label>
                         <InputText class="form-control" @bind-Value="@car.Company"/>
+                        <ValidationMessage For="() => car.Company"/>
                     </div>  
                 </div>
                 <div class="col">
                     <div class="form-group">
                         <label>Model</label>
                         <InputText class="form-control" @bind-Value="@car.Model"/>
+                        <ValidationMessage For="() => car.Model"/>
                     </div>  
                 </div>
             </div>
@@ -35,6 +38,7 @@
                     <div class="form-group">
                         <label>Year</label>
                         <InputNumber class="form-control" @bind-Value="@car.Year"/>
+                        <ValidationMessage For="() => car.Year"/>
                     </div>
                 </div>
             </div>
@@ -44,12 +48,14 @@
                     <div class="form-group">
                         <label>Engine Power</label>
                         <InputNumber class="form-control" @bind-Value="@car.EnginePower"/>
+                        <ValidationMessage For="() => car.EnginePower"/>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
                         <label>Engine Volume</label>
                         <InputNumber class="form-control" @bind-Value="@car.EngineVolume"/>
+                        <ValidationMessage For="() => car.EngineVolume"/>
                     </div>
                 </div>
             </div>
@@ -67,6 +73,7 @@
                     <div class="form-group">
                         <label>Price</label>
                         <InputNumber class="form-control" @bind-Value="@car.Price"/>
+                        <ValidationMessage For="() => car.Price"/>
                     </div>
                 </div>
             </div>
@@ -83,12 +90,21 @@
 </div>
 
 @code {
-    private CarModel car = new();
+    private EditContext editContext;
+
+    private CarBestDealFormModel car = new();
 
     private bool isLoading = false;
 
+    protected override void OnInitialized()
+    {
+        editContext = new(car);
+    }
+
     private async Task GetCarBestDeals()
     {
+        if (!editContext.Validate()) return;
+
         isLoading = true;
 
         await CarPriceService.GetCarBestDeals(car);

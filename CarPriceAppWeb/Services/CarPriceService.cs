@@ -16,8 +16,8 @@ namespace CarPriceAppWeb.Services
         Task SignInAsync(UserModel user);
         Task<bool> SignUpAsync(UserModel user);
         void SignOut();
-        Task<int> GetPriceAsync(CarModel car);
-        Task GetCarBestDeals(CarModel car);
+        Task<int> GetPriceAsync(CarPriceModel car);
+        Task GetCarBestDeals(CarBestDealFormModel car);
         Task<CarHistoryModel[]> GetHistortAsync();
     }
 
@@ -32,9 +32,9 @@ namespace CarPriceAppWeb.Services
         public CarPriceService(HttpClient client, LocalStorageService localStorage, NavigationManager navigationManager)
             => (_client, _localStorage, _navigationManager) = (client, localStorage, navigationManager);
 
-        public async Task GetCarBestDeals(CarModel car)
+        public async Task GetCarBestDeals(CarBestDealFormModel car)
         {
-            var res = await PostAsync<CarModel, Either<CarBestDealModel[], Error>>("/carbestdeals", car);
+            var res = await PostAsync<CarBestDealFormModel, Either<CarBestDealDataModel[], Error>>("/carbestdeals", car);
 
             if (res.Error is not null) return;
 
@@ -48,9 +48,9 @@ namespace CarPriceAppWeb.Services
             return res.Error is null ? res.Result : null;
         }
 
-        public async Task<int> GetPriceAsync(CarModel car)
+        public async Task<int> GetPriceAsync(CarPriceModel car)
         {
-            var res = await PostAsync<CarModel, Either<int, Error>>("/carprice", car);
+            var res = await PostAsync<CarPriceModel, Either<int, Error>>("/carprice", car);
 
             return res.Error is null ? res.Result : 0;
         }

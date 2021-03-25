@@ -45,19 +45,18 @@
 
     private async Task SignIning()
     {
-        if (editContext.Validate())
+        if (!editContext.Validate()) return;
+
+        isLoading = true;
+
+        await CarPriceService.SignInAsync(user);
+
+        if (LocalStorage.Token is not null)
         {
-            isLoading = true;
-
-            await CarPriceService.SignInAsync(user);
-
-            if (LocalStorage.Token is not null)
-            {
                 
                 NavManager.NavigateTo("calculate/carprice");
-            }
-            
-            isLoading = false;
         }
+            
+        isLoading = false;
     }
 }
