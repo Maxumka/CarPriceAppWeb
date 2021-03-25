@@ -30,6 +30,7 @@ namespace CarPriceAppWeb
                 client.DefaultRequestHeaders.Accept.Add(new("application/json"));
             });
 
+            services.AddScoped<AlertService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -4,6 +4,7 @@
 @inject NavigationManager NavManager
 @inject ICarPriceService CarPriceService
 @inject LocalStorageService LocalStorage
+@inject AlertService AlertService
 
 <div class="card">
     <h4 clas="card-header">Sign In</h4>
@@ -29,6 +30,7 @@
                 Sign In
             </button>
             <NavLink href="account/signup" class="btn btn-link">Sign Up</NavLink>
+            <button class="btn btn-primary" @onclick="@(() => AlertService.ShowAlert("hi"))">Alert</button>
         </EditForm>
     </div>
 </div>

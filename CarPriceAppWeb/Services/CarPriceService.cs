@@ -29,6 +29,8 @@ namespace CarPriceAppWeb.Services
 
         private readonly NavigationManager _navigationManager;
 
+        
+
         public CarPriceService(HttpClient client, LocalStorageService localStorage, NavigationManager navigationManager)
             => (_client, _localStorage, _navigationManager) = (client, localStorage, navigationManager);
 
