@@ -29,10 +29,14 @@ namespace CarPriceAppWeb.Services
 
         private readonly NavigationManager _navigationManager;
 
-        
+        private readonly AlertService _alertService;
 
-        public CarPriceService(HttpClient client, LocalStorageService localStorage, NavigationManager navigationManager)
-            => (_client, _localStorage, _navigationManager) = (client, localStorage, navigationManager);
+        public CarPriceService(HttpClient client, 
+                               LocalStorageService localStorage, 
+                               NavigationManager navigationManager, 
+                               AlertService alertService)
+            => (_client, _localStorage, _navigationManager, _alertService) 
+            = (client, localStorage, navigationManager, alertService);
 
         public async Task GetCarBestDeals(CarBestDealFormModel car)
         {
@@ -45,25 +49,17 @@ namespace CarPriceAppWeb.Services
 
         public async Task<CarHistoryModel[]> GetHistortAsync()
         {
-            var res = await GetAsync<Either<CarHistoryModel[], Error>>("/history");
-
-            return res.HasError ? res.Result : null;
+            return await GetAsync<CarHistoryModel[]>("/history");
         }
 
         public async Task<int> GetPriceAsync(CarPriceModel car)
         {
-            var res = await PostAsync<CarPriceModel, Either<int, Error>>("/carprice", car);
-
-            return res.HasError ? res.Result : 0;
+            return await PostAsync<CarPriceModel, int>("/carprice", car);
         }
 
         public async Task SignInAsync(UserModel user)
         {
-            var res = await PostAsync<UserModel, Either<string, Error>>("/identity", user);
-
-            if (res.HasError) return;
-
-            _localStorage.Token = res.Result;
+            _localStorage.Token = await PostAsync<UserModel, string>("/identity", user); ;
         }
 
         public void SignOut()
@@ -75,9 +71,7 @@ namespace CarPriceAppWeb.Services
 
         public async Task<bool> SignUpAsync(UserModel user)
         {
-            var res = await PostAsync<UserModel, Either<bool, Error>>("/signup", user);
-
-            return res.HasError ? res.Result : false;
+            return await PostAsync<UserModel, bool>("/signup", user);
         }
 
         private async Task<T> GetAsync<T>(string uri)
@@ -118,7 +112,22 @@ namespace CarPriceAppWeb.Services
                 return default;
             }
 
-            return await response.Content.ReadFromJsonAsync<T>();
+            var result =  await response.Content.ReadFromJsonAsync<Either<T, Error>>();
+
+            return HandleErrors(result);
+        }
+
+        private T HandleErrors<T>(Either<T, Error> either)
+        {
+            if (either.HasError)
+            {
+                _alertService.ShowAlert(either.Error.Message);
+                return default;
+            }
+            else
+            {
+                return either.Result;
+            }
         }
     }
 }
