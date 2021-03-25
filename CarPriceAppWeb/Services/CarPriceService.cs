@@ -8,6 +8,8 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text;
+using System.Collections.Generic;
+using System;
 
 namespace CarPriceAppWeb.Services
 {
@@ -40,11 +42,9 @@ namespace CarPriceAppWeb.Services
 
         public async Task GetCarBestDeals(CarBestDealFormModel car)
         {
-            var res = await PostAsync<CarBestDealFormModel, Either<CarBestDealDataModel[], Error>>("/carbestdeals", car);
+            var res = await PostAsync<CarBestDealFormModel, CarBestDealDataModel[]>("/carbestdeals", car);
 
-            if (res.HasError) return;
-
-            _localStorage.CarBestDealModels = res.Result;
+            _localStorage.CarBestDealModels = res;
         }
 
         public async Task<CarHistoryModel[]> GetHistortAsync()
@@ -59,7 +59,7 @@ namespace CarPriceAppWeb.Services
 
         public async Task SignInAsync(UserModel user)
         {
-            _localStorage.Token = await PostAsync<UserModel, string>("/identity", user); ;
+            _localStorage.Token = await PostAsync<UserModel, string>("/identity", user); 
         }
 
         public void SignOut()
@@ -105,7 +105,7 @@ namespace CarPriceAppWeb.Services
             SetToken(ref requestMessage);
 
             var response = await _client.SendAsync(requestMessage);
-
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
             if (response.StatusCode is HttpStatusCode.Unauthorized)
             {
                 _navigationManager.NavigateTo("account/signin");
