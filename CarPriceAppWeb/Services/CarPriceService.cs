@@ -36,7 +36,7 @@ namespace CarPriceAppWeb.Services
         {
             var res = await PostAsync<CarBestDealFormModel, Either<CarBestDealDataModel[], Error>>("/carbestdeals", car);
 
-            if (res.Error is not null) return;
+            if (res.HasError) return;
 
             _localStorage.CarBestDealModels = res.Result;
         }
@@ -45,21 +45,21 @@ namespace CarPriceAppWeb.Services
         {
             var res = await GetAsync<Either<CarHistoryModel[], Error>>("/history");
 
-            return res.Error is null ? res.Result : null;
+            return res.HasError ? res.Result : null;
         }
 
         public async Task<int> GetPriceAsync(CarPriceModel car)
         {
             var res = await PostAsync<CarPriceModel, Either<int, Error>>("/carprice", car);
 
-            return res.Error is null ? res.Result : 0;
+            return res.HasError ? res.Result : 0;
         }
 
         public async Task SignInAsync(UserModel user)
         {
             var res = await PostAsync<UserModel, Either<string, Error>>("/identity", user);
 
-            if (res.Error is not null) return;
+            if (res.HasError) return;
 
             _localStorage.Token = res.Result;
         }
@@ -75,7 +75,7 @@ namespace CarPriceAppWeb.Services
         {
             var res = await PostAsync<UserModel, Either<bool, Error>>("/signup", user);
 
-            return res.Error is null ? res.Result : false;
+            return res.HasError ? res.Result : false;
         }
 
         private async Task<T> GetAsync<T>(string uri)
