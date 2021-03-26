@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CarPriceAppWeb.Pages.HelperRazorComponents
+namespace CarPriceAppWeb.Shared
 {
     public class AlertComponent : ComponentBase, IDisposable
     {
