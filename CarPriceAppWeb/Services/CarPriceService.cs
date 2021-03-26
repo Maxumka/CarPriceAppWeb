@@ -105,7 +105,7 @@ namespace CarPriceAppWeb.Services
             SetToken(ref requestMessage);
 
             var response = await _client.SendAsync(requestMessage);
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
+            
             if (response.StatusCode is HttpStatusCode.Unauthorized)
             {
                 _navigationManager.NavigateTo("account/signin");

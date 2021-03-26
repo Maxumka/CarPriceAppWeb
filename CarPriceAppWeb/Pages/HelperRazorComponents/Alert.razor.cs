@@ -12,7 +12,6 @@ namespace CarPriceAppWeb.Pages.HelperRazorComponents
         [Inject]
         private AlertService AlertService { get; set; }
 
-        protected string Heading { get; set; }
         protected string Message { get; set; }
         protected bool IsVisible { get; set; }
         protected string BackgroundCssClass { get; set; }
@@ -39,9 +38,8 @@ namespace CarPriceAppWeb.Pages.HelperRazorComponents
 
         private void BuildAlert(string message)
         {
-            BackgroundCssClass = "bg-warning";
+            BackgroundCssClass = "bg-danger";
             IconCssClass = "exclamation";
-            Heading = "Warning";
             Message = message;
         }
 

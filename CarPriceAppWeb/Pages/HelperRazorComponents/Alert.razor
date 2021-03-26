@@ -1,11 +1,7 @@
 ﻿@inherits AlertComponent
 
 <div class="alert @(IsVisible ? "alert-visible" : null) @BackgroundCssClass">
-    <div class="alert-icon">
-        <i class="fa fa-@IconCssClass" aria-hidden="true"></i>
-    </div>
     <div class="alert-body">
-        <h5>@Heading</h5>
         <p>@Message</p>
     </div>
 </div>

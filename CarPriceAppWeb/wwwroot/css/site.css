@@ -61,29 +61,20 @@ a, .btn-link {
     left: 50%;
 }
 
-.alert-icon {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0 1rem;
-    font-size: 2.5rem;
-}
-
 .alert-body {
-    display: flex;
+    display: compact;
     flex-direction: column;
     flex: 1;
     padding-left: 1rem;
 }
-
-    .alert-body p {
-        margin-bottom: 0;
-    }
+.alert-body p {
+    margin-bottom: 0;
+}
 
 .alert-visible {
     display: flex;
     flex-direction: row;
-    animation: fadein 1.5s;
+    animation: fadein 1s;
 }
 
 @keyframes fadein {
