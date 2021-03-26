@@ -8,15 +8,13 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text;
-using System.Collections.Generic;
-using System;
 
 namespace CarPriceAppWeb.Services
 {
     public interface ICarPriceService
     {
         Task SignInAsync(UserModel user);
-        Task<bool> SignUpAsync(UserModel user);
+        Task SignUpAsync(UserModel user);
         void SignOut();
         Task<int> GetPriceAsync(CarPriceModel car);
         Task GetCarBestDeals(CarBestDealFormModel car);
@@ -42,9 +40,12 @@ namespace CarPriceAppWeb.Services
 
         public async Task GetCarBestDeals(CarBestDealFormModel car)
         {
-            var res = await PostAsync<CarBestDealFormModel, CarBestDealDataModel[]>("/carbestdeals", car);
+            _localStorage.CarBestDealModels = await PostAsync<CarBestDealFormModel, CarBestDealDataModel[]>("/carbestdeals", car);
 
-            _localStorage.CarBestDealModels = res;
+            if (_localStorage.CarBestDealModels is not null)
+            {
+                _navigationManager.NavigateTo($"carbestdeals/carbestdealsdata");
+            }
         }
 
         public async Task<CarHistoryModel[]> GetHistortAsync()
@@ -60,6 +61,10 @@ namespace CarPriceAppWeb.Services
         public async Task SignInAsync(UserModel user)
         {
             _localStorage.Token = await PostAsync<UserModel, string>("/identity", user); 
+            if (_localStorage.Token is not null)
+            {
+                _navigationManager.NavigateTo("calculate/carprice");
+            }
         }
 
         public void SignOut()
@@ -69,9 +74,13 @@ namespace CarPriceAppWeb.Services
             _navigationManager.NavigateTo("account/signin");
         }
 
-        public async Task<bool> SignUpAsync(UserModel user)
+        public async Task SignUpAsync(UserModel user)
         {
-            return await PostAsync<UserModel, bool>("/signup", user);
+            var isSussess =  await PostAsync<UserModel, bool>("/signup", user);
+
+            if (!isSussess) return;
+
+            await SignInAsync(user);
         }
 
         private async Task<T> GetAsync<T>(string uri)

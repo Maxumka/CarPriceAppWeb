@@ -108,11 +108,6 @@
         isLoading = true;
 
         await CarPriceService.GetCarBestDeals(car);
-
-        if (LocalStorage.CarBestDealModels is not null)
-        {
-            NavManager.NavigateTo($"carbestdeals/carbestdealsdata");
-        }
         
         isLoading = false;
     }

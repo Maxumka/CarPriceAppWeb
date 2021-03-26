@@ -51,12 +51,7 @@
         isLoading = true;
 
         await CarPriceService.SignInAsync(user);
-
-        if (LocalStorage.Token is not null)
-        {              
-            NavManager.NavigateTo("calculate/carprice");
-        }
-            
+  
         isLoading = false;
     }
 }

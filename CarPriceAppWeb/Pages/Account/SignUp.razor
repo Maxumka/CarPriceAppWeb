@@ -47,12 +47,7 @@
         {
             isLoading = true;
 
-            var isSignUp = await CarPriceService.SignUpAsync(user);
-
-            if (isSignUp)
-            {               
-                NavManager.NavigateTo("account/signin");
-            }
+            await CarPriceService.SignUpAsync(user);
 
             isLoading = false;
         }
