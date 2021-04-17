@@ -2,22 +2,22 @@
 
 @inject LocalStorageService LocalStorage
 
-<h1>Car Best Deals</h1>
+<h1>Лучшие объявления</h1>
 
 @if (сarBestDeals == null)
 {
-    <p><em>We have a problem :(</em></p>
+    <p><em>Таких машин нет :(</em></p>
 }
 else
 {
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
-                <th>Company</th>
-                <th>Model</th>
-                <th>Year</th>
-                <th>Price</th>
-                <th>Link</th>
+                <th>Компания</th>
+                <th>Модель</th>
+                <th>Год</th>
+                <th>Цена</th>
+                <th>Ссылка</th>
             </tr>
         </thead>
         <tbody>
@@ -36,8 +36,8 @@ else
         </tbody>
     </table>
 
-    <button class="btn btn-primary" @onclick="Back">Back</button>
-    <button class="btn btn-primary" @onclick="Next">Next</button>
+    <button class="btn btn-primary" @onclick="Back">Назад</button>
+    <button class="btn btn-primary" @onclick="Next">Вперед</button>
 }
 
 @code {

@@ -9,15 +9,18 @@
 <div class="card border-primary mb-3 rounded">
     <div class="card-body">
         <EditForm EditContext="@editContext">
+            <DataAnnotationsValidator />
             <div class="container">
                 <div class="row m-2">
 
                     <div class="col-sm">
                         <InputText class="form-control" @bind-Value="@car.Company" placeholder="Компания" />
+                        <ValidationMessage For="() => car.Company" />
                     </div>
 
                     <div class="col-sm">
                         <InputText class="form-control" @bind-Value="@car.Model" placeholder="Модель" />
+                        <ValidationMessage For="() => car.Model" />
                     </div>
 
                     <div class="col-sm">
@@ -29,7 +32,7 @@
                     </div>
 
                 </div>
-                
+
                 <div class="row m-2">
 
                     <div class="col">
@@ -85,11 +88,11 @@
                     </div>
 
                     <div class="col">
-                        <InputNumber class="form-control" @bind-Value="@car.FromPrice" placeholder="Цена от, ₽"/>
+                        <InputNumber class="form-control" @bind-Value="@car.FromPrice" placeholder="Цена от, ₽" />
                     </div>
 
                     <div class="col">
-                        <InputNumber class="form-control" @bind-Value="@car.ToPrice" placeholder="до"/>
+                        <InputNumber class="form-control" @bind-Value="@car.ToPrice" placeholder="до" />
                     </div>
 
                 </div>
@@ -102,7 +105,7 @@
                     <div class="col-sm">
                         <InputNumber class="form-control" @bind-Value="@car.ToMileage" placeholder="до" />
                     </div>
-                    
+
                     <div class="col-sm">
 
                         <button class="btn btn-warning" @onclick="Reset">Сбросить</button>

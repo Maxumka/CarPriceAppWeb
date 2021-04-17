@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace CarPriceAppWeb.Models
 {
     public enum Transmission
@@ -10,8 +12,12 @@ namespace CarPriceAppWeb.Models
 
     public class CarFormModel
     {
+        [Required(ErrorMessage = "Компания не может быть пустой")]
+        [MinLength(3, ErrorMessage = "Минимальная длина 3 символа")]
         public string Company { get; set; }
 
+        [Required(ErrorMessage = "Компания не может быть пустой")]
+        [MinLength(3, ErrorMessage = "Минимальная длина 3 символа")]
         public string Model { get; set; }
 
         public int? FromMileage { get; set; }

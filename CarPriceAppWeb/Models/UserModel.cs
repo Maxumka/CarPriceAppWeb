@@ -4,12 +4,12 @@ namespace CarPriceAppWeb.Models
 {
     public class UserModel
     {
-        [Required]
-        [MinLength(3, ErrorMessage = "Login is too small.")]
+        [Required(ErrorMessage = "Логин не может быть пустым")]
+        [MinLength(3, ErrorMessage = "Минимальная длина 3 символа")]
         public string Login { get; set; }
 
-        [Required]
-        [MinLength(3, ErrorMessage = "Password is too small.")]
+        [Required(ErrorMessage = "Пароль не может быть пустой")]
+        [MinLength(3, ErrorMessage = "Минимальная длина 3 символа")]
         public string Password { get; set; }
     }
 }
