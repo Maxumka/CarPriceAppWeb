@@ -17,7 +17,7 @@ namespace CarPriceAppWeb.Services
         Task SignUpAsync(UserModel user);
         void SignOut();
         Task<int> GetPriceAsync(CarPriceModel car);
-        Task GetCarBestDeals(CarBestDealFormModel car);
+        Task GetCarBestDeals(CarFormModel car);
         Task<CarHistoryModel[]> GetHistortAsync();
     }
 
@@ -38,9 +38,9 @@ namespace CarPriceAppWeb.Services
             => (_client, _localStorage, _navigationManager, _alertService) 
             = (client, localStorage, navigationManager, alertService);
 
-        public async Task GetCarBestDeals(CarBestDealFormModel car)
+        public async Task GetCarBestDeals(CarFormModel car)
         {
-            _localStorage.CarBestDealModels = await PostAsync<CarBestDealFormModel, CarBestDealDataModel[]>("/carbestdeals", car);
+            _localStorage.CarBestDealModels = await PostAsync<CarFormModel, CarBestDealDataModel[]>("/carbestdeals", car);
 
             if (_localStorage.CarBestDealModels is not null)
             {
