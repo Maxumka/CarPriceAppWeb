@@ -3,30 +3,36 @@
 @inject NavigationManager NavManager
 @inject ICarPriceService CarPriceService
 
-<div class="card">
-    <h4 clas="card-header">Sign Up</h4>
+<h4 >Регистрация</h4>
+
+<div class="card border-primary mb-3 rounded">
     <div class="card-body">
         <EditForm EditContext="editContext">
-            <DataAnnotationsValidator/>
+            <DataAnnotationsValidator />
+            @if (user.Password != retryPassword && retryPassword is not null)
+            {
+                <label class="text-danger">Пароли не совпадают</label>
+            }
 
             <div class="form-group">
-                <label>Login</label>
-                <InputText class="form-control" @bind-Value="@user.Login"/>
-                <ValidationMessage For="() => user.Login"/>
+                <InputText class="form-control" @bind-Value="@user.Login" placeholder="Логин" />
+                <ValidationMessage For="() => user.Login" />
             </div>
             <div class="form-group">
-                <label>Password</label>
-                <InputText class="form-control" @bind-Value="@user.Password" type="password"/>
-                <ValidationMessage For="() => user.Password"/>
+                <InputText class="form-control" @bind-Value="@user.Password" type="password" placeholder="Пароль" />
+                <ValidationMessage For="() => user.Password" />
+            </div>
+            <div class="form-group">
+                <InputText class="form-control" @bind-Value="@retryPassword" type="password" placeholder="Повторите пароль" />
             </div>
             <button class="btn btn-primary" @onclick="SignUping">
                 @if (isLoading)
                 {
                     <span class="spinner-border spinner-border-sm mr-1"></span>
                 }
-                Sign Up
+                Зарегистрироваться
             </button>
-            <NavLink href="account/signin" class="btn btn-link">Cancel</NavLink>
+            <NavLink href="account/signin" class="btn btn-link">Отмена</NavLink>
         </EditForm>
     </div>
 </div>
@@ -36,6 +42,8 @@
     private EditContext editContext;
     private bool isLoading = false;
 
+    private string retryPassword = null;
+
     protected override void OnInitialized()
     {
         editContext = new(user);
@@ -43,6 +51,11 @@
 
     private async Task SignUping()
     {
+        if (retryPassword != user.Password)
+        {
+            return;
+        }
+
         if (editContext.Validate())
         {
             isLoading = true;

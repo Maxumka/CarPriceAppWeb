@@ -2,12 +2,12 @@
 
 @inject ICarPriceService CarPriceService
 
-<h4>Sign Out</h4>
+<h4>Выход</h4>
 
-<p>Are you sure you want to sign out?</p>
+<p>Вы уверены что хотите выйти?</p>
 
-<button class="btn btn-primary" @onclick="SignOuting">Yes</button>
-<NavLink href="calculate/carprice" class="btn btn-link">Cancel</NavLink>
+<button class="btn btn-primary" @onclick="SignOuting">Да</button>
+<NavLink href="calculate/carprice" class="btn btn-link">Нет</NavLink>
 
 @code {
     private void SignOuting()

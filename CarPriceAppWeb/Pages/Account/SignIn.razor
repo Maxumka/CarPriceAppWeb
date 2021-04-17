@@ -6,20 +6,19 @@
 @inject LocalStorageService LocalStorage
 @inject AlertService AlertService
 
-<div class="card">
-    <h4 clas="card-header">Sign In</h4>
+
+<h4>Вход</h4>
+<div class="card border-primary mb-3 rounded">
     <div class="card-body">
         <EditForm EditContext="@editContext">
             <DataAnnotationsValidator/>
 
             <div class="form-group">
-                <label>Login</label>
-                <InputText class="form-control" @bind-Value="@user.Login"/>
+                <InputText class="form-control" @bind-Value="@user.Login" placeholder="Логин"/>
                 <ValidationMessage For="() => user.Login"/>
             </div>
             <div class="form-group">
-                <label>Password</label>
-                <InputText class="form-control" @bind-Value="@user.Password" type="password"/>
+                <InputText class="form-control" @bind-Value="@user.Password" type="password" placeholder="Пароль"/>
                 <ValidationMessage For="() => user.Password"/>
             </div>
             <button class="btn btn-primary" @onclick="SignIning">
@@ -27,9 +26,9 @@
                 {
                     <span class="spinner-border spinner-border-sm mr-1"></span>
                 }
-                Sign In
+                Войти
             </button>
-            <NavLink href="account/signup" class="btn btn-link">Sign Up</NavLink>
+            <NavLink href="account/signup" class="btn btn-link">Зарегистрироваться</NavLink>
         </EditForm>
     </div>
 </div>
