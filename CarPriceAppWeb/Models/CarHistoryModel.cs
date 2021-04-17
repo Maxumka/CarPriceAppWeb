@@ -7,9 +7,7 @@ namespace CarPriceAppWeb.Models
 
         public string Model { get; set; }
 
-        public int Year { get; set; }
-
-        public int Price { get; set; }
+        public string UserLogin { get; set; }
 
         public string Action { get; set; }
     }
