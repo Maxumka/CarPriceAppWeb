@@ -2,79 +2,90 @@
 
 @inject ICarPriceService CarPriceService
 
-<div class="card">
-    <h4 clas="card-header">Car price</h4>
+<h4>Цена автомобиля</h4>
+
+<div class="card border-primary mb-3 rounded">
     <div class="card-body">
         <EditForm EditContext="@editContext">
             <DataAnnotationsValidator/>
 
-            <div class="form-row">
-                <div class="col">
-                    <div class="form-group">
-                        <label>Company</label>
-                        <InputText class="form-control" @bind-Value="@car.Company"/>
-                        <ValidationMessage For="() => car.Company"/>
-                    </div>  
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label>Model</label>
-                        <InputText class="form-control" @bind-Value="@car.Model"/>
-                        <ValidationMessage For="() => car.Model"/>
-                    </div>  
-                </div>
-            </div>
+            <div class="container">
+                <div class="row m-2">
+                    <div class="col-sm">
+                        <InputText class="form-control" @bind-Value="@car.Company" placeholder="Компания" />
+                        <ValidationMessage For="() => car.Company" />
+                    </div>
 
-            <div class="form-row">
-                <div class="col">
-                    <div class="form-group">
-                        <label>Mileage</label>
-                        <InputNumber class="form-control" @bind-Value="@car.Mileage"/>
-                        <ValidationMessage For="() => car.Mileage"/>
+                    <div class="col-sm">
+                        <InputText class="form-control" @bind-Value="@car.Model" placeholder="Модель" />
+                        <ValidationMessage For="() => car.Model" />
                     </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label>Year</label>
-                        <InputNumber class="form-control" @bind-Value="@car.Year"/>
-                        <ValidationMessage For="() => car.Year"/>
-                    </div>
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="col">
-                    <div class="form-group">
-                        <label>Engine Power</label>
-                        <InputNumber class="form-control" @bind-Value="@car.EnginePower"/>
-                        <ValidationMessage For="() => car.EnginePower"/>
+                    <div class="col-sm">
+                        <InputNumber class="form-control" @bind-Value="@car.Mileage" placeholder="Пробег, км" />
+                        <ValidationMessage For="() => car.Mileage" />
                     </div>
+
                 </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label>Engine Volume</label>
-                        <InputNumber class="form-control" @bind-Value="@car.EngineVolume"/>
-                        <ValidationMessage For="() => car.EngineVolume"/>
+                <div class="row m-2">
+                    <div class="col-sm">
+                        <InputNumber class="form-control" @bind-Value="@car.EnginePower" placeholder="Мощность, л.с." />
+                        <ValidationMessage For="() => car.EnginePower" />
                     </div>
+
+                    <div class="col-sm">
+                        <select class="form-control" @bind="car.Year">
+                            <option selected>Год</option>
+                                @foreach (var year in fromYears)
+                                {
+                                    <option value="@year">@year</option>
+                                }
+                        </select>
+                    </div>
+
+                    <div class="col-sm">
+                        <select class="form-control" @bind="car.EngineVolume">
+                            <option selected>Объем, л</option>
+                            @foreach (var volume in fromVolumes)
+                            {
+                                <option value="@volume">@GetViewValueForVolume(volume)</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="row m-2">
+
+                    <div class="col">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="gridCheck" @bind-value="@car.Transmission">
+                                <label class="form-check-label" for="gridCheck">Коробка автомат?</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <button class="btn btn-warning" @onclick="Reset">Сбросить</button>
+                    </div>
+
+                    <div class="col">
+                        <button class="btn btn-primary" @onclick="GetPrice">
+                            @if (isLoading)
+                            {
+                                <span class="spinner-border spinner-border-sm mr-1"></span>
+                            }
+                            Посчитать цену
+                        </button>
+                    </div>
+
                 </div>
             </div>
-             
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="gridCheck" @bind-value="@car.Transmission">
-                    <label class="form-check-label" for="gridCheck">Is automatic transmission?</label>
-                </div>
-            </div>
+          
+
             
-            <h4>Price: @price</h4>
-
-            <button class="btn btn-primary" @onclick="GetPrice">
-                @if (isLoading)
-                {
-                    <span class="spinner-border spinner-border-sm mr-1"></span>
-                }
-                Calculate price
-            </button>
+            <h4>Цена: @price ₽</h4>
         </EditForm>
     </div>
 </div>
@@ -88,10 +99,31 @@
 
     private int price = 0;
 
+    #region Year
+    private static IEnumerable<int> GetValueForYears = Enumerable.Range(1890, 132)
+                                                              .Reverse();
+
+    private readonly IEnumerable<int> fromYears = GetValueForYears;
+    private readonly IEnumerable<int> toYears = GetValueForYears;
+    #endregion Year
+
+    #region Volumes
+
+    private static IEnumerable<double> GetValueForVolumes => Enumerable.Range(2, 99)
+                                                               .Select(x => (double)x / 10);
+
+    private readonly IEnumerable<double> fromVolumes = GetValueForVolumes;
+    private readonly IEnumerable<double> toVolumes = GetValueForVolumes;
+    private string GetViewValueForVolume(double x) => $"{x} л";
+
+    #endregion Volumes
+
     protected override void OnInitialized()
     {
         editContext = new(car);
     }
+
+    private void Reset() => car = new();
 
     private async Task GetPrice()
     {
@@ -105,7 +137,7 @@
         {
             StateHasChanged();
         }
-        
+
         isLoading = false;
     }
 }

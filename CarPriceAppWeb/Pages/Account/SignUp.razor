@@ -3,7 +3,7 @@
 @inject NavigationManager NavManager
 @inject ICarPriceService CarPriceService
 
-<h4 >Регистрация</h4>
+<h4>Регистрация</h4>
 
 <div class="card border-primary mb-3 rounded">
     <div class="card-body">
@@ -53,6 +53,7 @@
     {
         if (retryPassword != user.Password)
         {
+            retryPassword = "";
             return;
         }
 
