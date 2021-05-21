@@ -10,6 +10,41 @@ namespace CarPriceAppWeb.Models
         Mechanic
     }
 
+    public enum Engine
+    {
+        Any,
+        Gasoline, 
+        Diesel,
+        Hybrid,
+        Electric
+    }
+
+    // привод
+    public enum Gear
+    {
+        Any,
+        Forward,
+        Back,
+        All 
+    }
+
+    public enum SteeringWheel
+    {
+        Any,
+        Left,
+        Right
+    }
+
+    public enum CarBody 
+    {
+        Any,
+        Sedan,
+        Hatchback,
+        Coupe,
+        Pickup,
+        Convertible
+    }
+
     public class CarFormModel
     {
         [Required(ErrorMessage = "Компания не может быть пустой")]
@@ -41,5 +76,13 @@ namespace CarPriceAppWeb.Models
         public int? ToPrice { get; set; }
 
         public Transmission Transmission { get; set; }
+
+        public Engine Engine { get; set; }
+
+        public Gear Gear { get; set; }
+
+        public SteeringWheel SteeringWheel { get; set; }
+
+        public CarBody CarBody { get; set; }
     }
 }

@@ -25,12 +25,12 @@
 
                     <div class="col-sm">
                         <select class="form-control" @bind="car.Transmission">
+                            <option value="@Transmission.Any" disabled selected>Коробка передач</option>
                             <option value="@Transmission.Any">Любая</option>
                             <option value="@Transmission.Automatic">Автомат</option>
                             <option value="@Transmission.Mechanic">Механика</option>
                         </select>
                     </div>
-
                 </div>
 
                 <div class="row m-2">
@@ -107,12 +107,54 @@
                     </div>
 
                     <div class="col-sm">
+                        <select class="form-control" @bind="car.Engine">
+                            <option value="@Engine.Any" disabled selected>Двигатель</option>
+                            <option value="@Engine.Any">Любой</option>
+                            <option value="@Engine.Gasoline">Бензин</option>
+                            <option value="@Engine.Diesel">Дизель</option>
+                            <option value="@Engine.Hybrid">Гибрид</option>
+                            <option value="@Engine.Electric">Электро</option>
+                        </select>
+                    </div>
 
-                        <button class="btn btn-warning" @onclick="Reset">Сбросить</button>
+                </div>
 
+                <div class="row m-2">
+                    <div class="col-sm">
+                        <select class="form-control" @bind="car.Gear">
+                            <option value="@Gear.Any" disabled selected>Привод</option>
+                            <option value="@Gear.Any">Любой</option>
+                            <option value="@Gear.Forward">Передений</option>
+                            <option value="@Gear.Back">Задний</option>
+                            <option value="@Gear.All">Полный</option>
+                        </select>
                     </div>
 
                     <div class="col-sm">
+                        <select class="form-control" @bind="car.SteeringWheel">
+                            <option value="@SteeringWheel.Any" disabled selected>Руль</option>
+                            <option value="@SteeringWheel.Any">Любой</option>
+                            <option value="@SteeringWheel.Right">Правый</option>
+                            <option value="@SteeringWheel.Left">Левый</option>
+                        </select>
+                    </div>
+
+                   <div class="col-sm">
+                        <select class="form-control" @bind="car.CarBody">
+                            <option value="@CarBody.Any" disabled selected>Кузов</option>
+                            <option value="@CarBody.Any">Любой</option>
+                            <option value="@CarBody.Sedan">Седан</option>
+                            <option value="@CarBody.Hatchback">Хэтчбэк</option>
+                            <option value="@CarBody.Coupe">Купе</option>
+                            <option value="@CarBody.Pickup">Пикап</option>
+                            <option value="@CarBody.Convertible">Кабриолет</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row m-2">
+                    <div class="col-sm">
+                        <button class="btn btn-warning" @onclick="Reset">Сбросить</button>
 
                         <button class="btn btn-primary" @onclick="GetCarBestDeals">
                             @if (isLoading)
@@ -121,7 +163,6 @@
                             }
                             Получить лучшие объявления
                         </button>
-
                     </div>
 
                 </div>
