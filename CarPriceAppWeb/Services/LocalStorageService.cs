@@ -8,5 +8,7 @@ namespace CarPriceAppWeb.Services
         public IEnumerable<CarBestDealDataModel> CarBestDealModels { get; set; }
 
         public string Token { get; set; } = null;
+
+        public List<CarMarkModel> CarMarkModels { get; set; } = null;
     }
 }

@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text;
+using System.Collections.Generic;
 
 namespace CarPriceAppWeb.Services
 {
@@ -63,7 +64,12 @@ namespace CarPriceAppWeb.Services
             _localStorage.Token = await PostAsync<UserModel, string>("/identity", user); 
             if (_localStorage.Token is not null)
             {
-                _navigationManager.NavigateTo("calculate/carprice");
+                _localStorage.CarMarkModels = await GetAsync<List<CarMarkModel>>("/carmarktype");
+
+                if (_localStorage.CarMarkModels is not null)
+                {
+                    _navigationManager.NavigateTo("calculate/carprice");
+                }
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿@page "/carbestdeals/carbestdealsform"
 
+
 @inject ICarPriceService CarPriceService
 @inject LocalStorageService LocalStorage
 @inject NavigationManager NavManager
@@ -14,14 +15,24 @@
                 <div class="row m-2">
 
                     <div class="col-sm">
-                        <InputText class="form-control" @bind-Value="@car.Company" placeholder="Компания" />
-                        <ValidationMessage For="() => car.Company" />
+                        <select class="form-control" @onchange="ChangeMarkModel">
+                            <option disable selected >Компании</option>
+                            @foreach (var carMark in LocalStorage.CarMarkModels)
+                            {
+                                <option value="@carMark.Name">@carMark.Name</option>
+                            }
+                        </select>
                     </div>
 
                     <div class="col-sm">
-                        <InputText class="form-control" @bind-Value="@car.Model" placeholder="Модель" />
-                        <ValidationMessage For="() => car.Model" />
-                    </div>
+                        <select class="form-control" @onchange="ChangeTypeModel">
+                            <option disable selected>Модели</option>
+                            @foreach (var carType in carMarkModel.TypeModels)
+                            {
+                                <option value="@carType.Name">@carType.Name</option>
+                            }
+                        </select>
+                    </div> 
 
                     <div class="col-sm">
                         <select class="form-control" @bind="car.Transmission">
@@ -175,9 +186,17 @@
 @code {
     private EditContext editContext;
 
+    private CarMarkModel carMarkModel;
+
+    private CarTypeModel carTypeModel = new();
+
     private CarFormModel car = new();
 
     private bool isLoading = false;
+
+    private void ChangeMarkModel(ChangeEventArgs e) => carMarkModel = LocalStorage.CarMarkModels.First(c => c.Name == e.Value.ToString());
+
+    private void ChangeTypeModel(ChangeEventArgs e) => carTypeModel = carMarkModel.TypeModels.First(c => c.Name == e.Value.ToString());
 
     #region Year
     private static IEnumerable<int> GetValueForYears = Enumerable.Range(1890, 132)
@@ -200,6 +219,10 @@
 
     protected override void OnInitialized()
     {
+        carMarkModel = LocalStorage.CarMarkModels.First();
+
+        carTypeModel = carMarkModel.TypeModels.First();
+
         editContext = new(car);
     }
 
@@ -207,6 +230,10 @@
 
     private async Task GetCarBestDeals()
     {
+        car.Company = carMarkModel.Name;
+
+        car.Model = carTypeModel.Name;
+
         if (!editContext.Validate()) return;
 
         isLoading = true;
