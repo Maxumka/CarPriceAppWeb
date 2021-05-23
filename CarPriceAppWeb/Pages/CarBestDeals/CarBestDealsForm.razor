@@ -194,9 +194,19 @@
 
     private bool isLoading = false;
 
-    private void ChangeMarkModel(ChangeEventArgs e) => carMarkModel = LocalStorage.CarMarkModels.First(c => c.Name == e.Value.ToString());
+    private void ChangeMarkModel(ChangeEventArgs e) 
+    {
+        carMarkModel = LocalStorage.CarMarkModels.First(c => c.Name == e.Value.ToString());
 
-    private void ChangeTypeModel(ChangeEventArgs e) => carTypeModel = carMarkModel.TypeModels.First(c => c.Name == e.Value.ToString());
+        car.Company = carMarkModel.Name;
+    }
+
+    private void ChangeTypeModel(ChangeEventArgs e) 
+    {
+        carTypeModel = carMarkModel.TypeModels.First(c => c.Name == e.Value.ToString());
+
+        car.Model = carTypeModel.Name;
+    } 
 
     #region Year
     private static IEnumerable<int> GetValueForYears = Enumerable.Range(1890, 132)
@@ -230,9 +240,7 @@
 
     private async Task GetCarBestDeals()
     {
-        car.Company = carMarkModel.Name;
-
-        car.Model = carTypeModel.Name;
+        car.Link = carTypeModel.Link;
 
         if (!editContext.Validate()) return;
 

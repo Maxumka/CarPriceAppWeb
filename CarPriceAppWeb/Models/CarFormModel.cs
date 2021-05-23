@@ -55,6 +55,8 @@ namespace CarPriceAppWeb.Models
         [MinLength(3, ErrorMessage = "Минимальная длина 3 символа")]
         public string Model { get; set; }
 
+        public string Link { get; set; }
+
         public int? FromMileage { get; set; }
 
         public int? ToMileage { get; set; }
